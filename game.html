@@ -34,14 +34,61 @@
     <div class="container">
         <h1>Bulls and Cows Game</h1>
         <div id="guesses">
-            <!-- Dynamic generation of guess rows -->
+            <div class="guess-row" id="row1">
+                <input type="text" maxlength="1" class="guess" id="guess11" oninput="handleInput(event, 1, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess12" oninput="handleInput(event, 1, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess13" oninput="handleInput(event, 1, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess14" oninput="handleInput(event, 1, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess15" oninput="handleInput(event, 1, 5)">
+                <div class="feedback" id="feedback1"></div>
+            </div>
+            <!-- Repeat the above div for each row -->
+            <div class="guess-row" id="row2">
+                <input type="text" maxlength="1" class="guess" id="guess21" oninput="handleInput(event, 2, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess22" oninput="handleInput(event, 2, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess23" oninput="handleInput(event, 2, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess24" oninput="handleInput(event, 2, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess25" oninput="handleInput(event, 2, 5)">
+                <div class="feedback" id="feedback2"></div>
+            </div>
+            <div class="guess-row" id="row3">
+                <input type="text" maxlength="1" class="guess" id="guess31" oninput="handleInput(event, 3, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess32" oninput="handleInput(event, 3, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess33" oninput="handleInput(event, 3, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess34" oninput="handleInput(event, 3, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess35" oninput="handleInput(event, 3, 5)">
+                <div class="feedback" id="feedback3"></div>
+            </div>
+            <div class="guess-row" id="row4">
+                <input type="text" maxlength="1" class="guess" id="guess41" oninput="handleInput(event, 4, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess42" oninput="handleInput(event, 4, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess43" oninput="handleInput(event, 4, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess44" oninput="handleInput(event, 4, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess45" oninput="handleInput(event, 4, 5)">
+                <div class="feedback" id="feedback4"></div>
+            </div>
+            <div class="guess-row" id="row5">
+                <input type="text" maxlength="1" class="guess" id="guess51" oninput="handleInput(event, 5, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess52" oninput="handleInput(event, 5, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess53" oninput="handleInput(event, 5, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess54" oninput="handleInput(event, 5, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess55" oninput="handleInput(event, 5, 5)">
+                <div class="feedback" id="feedback5"></div>
+            </div>
+            <div class="guess-row" id="row6">
+                <input type="text" maxlength="1" class="guess" id="guess61" oninput="handleInput(event, 6, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess62" oninput="handleInput(event, 6, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess63" oninput="handleInput(event, 6, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess64" oninput="handleInput(event, 6, 4)">
+                <input type="text" maxlength="1" class="guess" id="guess65" oninput="handleInput(event, 6, 5)">
+                <div class="feedback" id="feedback6"></div>
+            </div>
         </div>
         <div id="message"></div>
     </div>
 
     <script>
         let targetNumber = generateRandomNumber();
-        let currentRow = 1;
         let remainingGuesses = 6;
 
         function generateRandomNumber() {
@@ -72,7 +119,7 @@
             }
 
             // Submit guess if all boxes are filled
-            if (column === 5 && row === currentRow && value !== '') {
+            if (column === 5 && value !== '') {
                 submitGuess(row);
             }
         }
@@ -98,8 +145,6 @@
                         showMessage(`You have ${remainingGuesses} guesses left.`);
                     }
                 }
-                currentRow++;
-                createGuessRow(); // Create a new guess row
             } else {
                 alert("Please fill all boxes before submitting.");
             }
@@ -120,32 +165,10 @@
             return { bulls, cows };
         }
 
-        function createGuessRow() {
-            if (currentRow <= 6) {
-                let guessesDiv = document.getElementById("guesses");
-                let newRow = document.createElement("div");
-                newRow.classList.add("guess-row");
-                newRow.id = `row${currentRow}`;
-                newRow.innerHTML = `
-                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}1" oninput="handleInput(event, ${currentRow}, 1)">
-                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}2" oninput="handleInput(event, ${currentRow}, 2)">
-                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}3" oninput="handleInput(event, ${currentRow}, 3)">
-                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}4" oninput="handleInput(event, ${currentRow}, 4)">
-                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}5" oninput="handleInput(event, ${currentRow}, 5)">
-                    <div class="feedback" id="feedback${currentRow}"></div>
-                `;
-                guessesDiv.appendChild(newRow);
-                document.getElementById(`guess${currentRow}1`).focus();
-            }
-        }
-
         function showMessage(message) {
             let messageDiv = document.getElementById("message");
             messageDiv.textContent = message;
         }
-
-        // Create the first guess row initially
-        createGuessRow();
     </script>
 </body>
 </html>
