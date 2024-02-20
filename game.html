@@ -7,15 +7,20 @@
         .container {
             text-align: center;
         }
-        #guesses {
-            margin-bottom: 20px;
+
+        .guess-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
         }
-=
+
         .guess {
-            width: 50px; /* Adjust the width */
-            height: 50px; /* Adjust the height */
+            width: 50px;
+            height: 50px;
             text-align: center;
             margin: 0 5px;
+            font-size: 24px;
         }
 
         #keypad {
@@ -36,11 +41,16 @@
     <div class="container">
         <h1>Bulls and Cows Game</h1>
         <div id="guesses">
-            <input type="text" maxlength="1" class="guess" id="guess1">
-            <input type="text" maxlength="1" class="guess" id="guess2">
-            <input type="text" maxlength="1" class="guess" id="guess3">
-            <input type="text" maxlength="1" class="guess" id="guess4">
-            <input type="text" maxlength="1" class="guess" id="guess5">
+            <div class="guess-row">
+                <input type="text" maxlength="1" class="guess" id="guess1">
+                <input type="text" maxlength="1" class="guess" id="guess2">
+                <input type="text" maxlength="1" class="guess" id="guess3">
+                <input type="text" maxlength="1" class="guess" id="guess4">
+                <input type="text" maxlength="1" class="guess" id="guess5">
+                <button onclick="submitGuess()">Submit</button>
+                <div id="feedback1"></div>
+            </div>
+            <!-- Repeat the above div for each row -->
         </div>
         <div id="keypad">
             <button onclick="addDigit(1)">1</button>
@@ -54,14 +64,12 @@
             <button onclick="addDigit(9)">9</button>
             <button onclick="addDigit(0)">0</button>
             <button onclick="clearInput()">Clear</button>
-            <button onclick="submitGuess()">Submit</button>
         </div>
-        <div id="feedback"></div>
     </div>
 
     <script>
         let targetNumber = generateRandomNumber();
-        let currentGuess = "";
+        let currentRow = 1;
 
         function generateRandomNumber() {
             let num = "";
@@ -75,35 +83,27 @@
         }
 
         function addDigit(digit) {
-            if (currentGuess.length < 5) {
-                currentGuess += digit;
-                updateGuessDisplay();
+            let input = document.getElementById(`guess${currentRow}`);
+            if (input.value.length < 1) {
+                input.value = digit;
             }
         }
 
         function clearInput() {
-            currentGuess = "";
-            updateGuessDisplay();
-        }
-
-        function updateGuessDisplay() {
-            for (let i = 0; i < currentGuess.length; i++) {
-                document.getElementById(`guess${i + 1}`).value = currentGuess[i];
-            }
-            for (let i = currentGuess.length; i < 5; i++) {
-                document.getElementById(`guess${i + 1}`).value = "";
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`guess${currentRow}`).value = "";
             }
         }
 
         function submitGuess() {
-            if (currentGuess.length === 5) {
-                let { bulls, cows } = checkGuess(currentGuess);
-                let feedback = document.getElementById("feedback");
-                feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
-                clearInput();
-            } else {
-                alert("Please enter a 5-digit number.");
+            let guess = "";
+            for (let i = 1; i <= 5; i++) {
+                guess += document.getElementById(`guess${currentRow}`).value;
             }
+            let { bulls, cows } = checkGuess(guess);
+            let feedback = document.getElementById(`feedback${currentRow}`);
+            feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
+            currentRow++;
         }
 
         function checkGuess(guess) {
