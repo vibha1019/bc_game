@@ -36,11 +36,13 @@
         <div id="guesses">
             <!-- Dynamic generation of guess rows -->
         </div>
+        <div id="message"></div>
     </div>
 
     <script>
         let targetNumber = generateRandomNumber();
         let currentRow = 1;
+        let remainingGuesses = 6;
 
         function generateRandomNumber() {
             let num = "";
@@ -87,7 +89,14 @@
                 let feedback = document.getElementById(`feedback${row}`);
                 feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
                 if (bulls === 5) {
-                    alert("Congratulations! You got the number!");
+                    showMessage("Congratulations! You got the number!");
+                } else {
+                    remainingGuesses--;
+                    if (remainingGuesses === 0) {
+                        showMessage(`Good attempt! The actual number was ${targetNumber}.`);
+                    } else {
+                        showMessage(`You have ${remainingGuesses} guesses left.`);
+                    }
                 }
                 currentRow++;
                 createGuessRow(); // Create a new guess row
@@ -112,20 +121,27 @@
         }
 
         function createGuessRow() {
-            let guessesDiv = document.getElementById("guesses");
-            let newRow = document.createElement("div");
-            newRow.classList.add("guess-row");
-            newRow.id = `row${currentRow}`;
-            newRow.innerHTML = `
-                <input type="text" maxlength="1" class="guess" id="guess${currentRow}1" oninput="handleInput(event, ${currentRow}, 1)">
-                <input type="text" maxlength="1" class="guess" id="guess${currentRow}2" oninput="handleInput(event, ${currentRow}, 2)">
-                <input type="text" maxlength="1" class="guess" id="guess${currentRow}3" oninput="handleInput(event, ${currentRow}, 3)">
-                <input type="text" maxlength="1" class="guess" id="guess${currentRow}4" oninput="handleInput(event, ${currentRow}, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess${currentRow}5" oninput="handleInput(event, ${currentRow}, 5)">
-                <div class="feedback" id="feedback${currentRow}"></div>
-            `;
-            guessesDiv.appendChild(newRow);
-            document.getElementById(`guess${currentRow}1`).focus();
+            if (currentRow <= 6) {
+                let guessesDiv = document.getElementById("guesses");
+                let newRow = document.createElement("div");
+                newRow.classList.add("guess-row");
+                newRow.id = `row${currentRow}`;
+                newRow.innerHTML = `
+                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}1" oninput="handleInput(event, ${currentRow}, 1)">
+                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}2" oninput="handleInput(event, ${currentRow}, 2)">
+                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}3" oninput="handleInput(event, ${currentRow}, 3)">
+                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}4" oninput="handleInput(event, ${currentRow}, 4)">
+                    <input type="text" maxlength="1" class="guess" id="guess${currentRow}5" oninput="handleInput(event, ${currentRow}, 5)">
+                    <div class="feedback" id="feedback${currentRow}"></div>
+                `;
+                guessesDiv.appendChild(newRow);
+                document.getElementById(`guess${currentRow}1`).focus();
+            }
+        }
+
+        function showMessage(message) {
+            let messageDiv = document.getElementById("message");
+            messageDiv.textContent = message;
         }
 
         // Create the first guess row initially
