@@ -28,15 +28,6 @@
             font-weight: bold;
             margin-left: 20px;
         }
-
-        #keypad {
-            margin-bottom: 20px;
-        }
-
-        #keypad button {
-            padding: 10px 20px;
-            margin: 5px;
-        }
     </style>
 </head>
 <body>
@@ -44,19 +35,6 @@
         <h1>Bulls and Cows Game</h1>
         <div id="guesses">
             <!-- Dynamic generation of guess rows -->
-        </div>
-        <div id="keypad">
-            <button onclick="addDigit(1)">1</button>
-            <button onclick="addDigit(2)">2</button>
-            <button onclick="addDigit(3)">3</button>
-            <button onclick="addDigit(4)">4</button>
-            <button onclick="addDigit(5)">5</button>
-            <button onclick="addDigit(6)">6</button>
-            <button onclick="addDigit(7)">7</button>
-            <button onclick="addDigit(8)">8</button>
-            <button onclick="addDigit(9)">9</button>
-            <button onclick="addDigit(0)">0</button>
-            <button onclick="clearInput()">Clear</button>
         </div>
     </div>
 
@@ -75,19 +53,6 @@
             return num;
         }
 
-        function addDigit(digit) {
-            let input = document.getElementById(`guess${currentRow}${document.querySelectorAll(`.guess-row#${'row'+currentRow} input`).length-4}`);
-            if (input.value.length < 1) {
-                input.value = digit;
-            }
-        }
-
-        function clearInput() {
-            for (let i = 1; i <= 5; i++) {
-                document.getElementById(`guess${currentRow}${i}`).value = "";
-            }
-        }
-
         function submitGuess(row) {
             let guess = "";
             for (let i = 1; i <= 5; i++) {
@@ -96,6 +61,9 @@
             let { bulls, cows } = checkGuess(guess);
             let feedback = document.getElementById(`feedback${row}`);
             feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
+            if (bulls === 5) {
+                alert("Congratulations! You got the number!");
+            }
             currentRow++;
             createGuessRow(); // Create a new guess row
         }
