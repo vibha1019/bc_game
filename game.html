@@ -80,14 +80,20 @@
             for (let i = 1; i <= 5; i++) {
                 guess += document.getElementById(`guess${row}${i}`).value;
             }
-            let { bulls, cows } = checkGuess(guess);
-            let feedback = document.getElementById(`feedback${row}`);
-            feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
-            if (bulls === 5) {
-                alert("Congratulations! You got the number!");
+
+            // Check if all boxes are filled
+            if (guess.length === 5) {
+                let { bulls, cows } = checkGuess(guess);
+                let feedback = document.getElementById(`feedback${row}`);
+                feedback.textContent = `Bulls: ${bulls}, Cows: ${cows}`;
+                if (bulls === 5) {
+                    alert("Congratulations! You got the number!");
+                }
+                currentRow++;
+                createGuessRow(); // Create a new guess row
+            } else {
+                alert("Please fill all boxes before submitting.");
             }
-            currentRow++;
-            createGuessRow(); // Create a new guess row
         }
 
         function checkGuess(guess) {
