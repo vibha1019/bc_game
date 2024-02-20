@@ -5,15 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulls and Cows Game</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
         .container {
             text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            color: #333;
         }
 
         .guess-row {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .guess {
@@ -22,6 +34,8 @@
             text-align: center;
             margin: 0 5px;
             font-size: 24px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
         }
 
         .feedback {
@@ -32,6 +46,41 @@
         .feedback-container {
             display: flex;
             align-items: center;
+        }
+
+        #message {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        #message-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            z-index: 1000;
+        }
+
+        #message-popup p {
+            margin: 0;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
@@ -100,6 +149,11 @@
                 </div>
             </div>
         </div>
+        <div id="message-popup">
+            <p id="message-text"></p>
+            <button onclick="hideMessage()">Close</button>
+        </div>
+        <div id="overlay"></div>
         <div id="message"></div>
     </div>
 
@@ -182,8 +236,15 @@
         }
 
         function showMessage(message) {
-            let messageDiv = document.getElementById("message");
+            let messageDiv = document.getElementById("message-text");
             messageDiv.textContent = message;
+            document.getElementById("message-popup").style.display = "block";
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function hideMessage() {
+            document.getElementById("message-popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
         }
     </script>
 </body>
