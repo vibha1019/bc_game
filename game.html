@@ -36,9 +36,60 @@
             display: flex;
             align-items: center;
         }
+
+        /* Styles for the modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+
+        /* Close button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <!-- Modal popup -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>How to Play Cows & Bulls</h2>
+            <p>Welcome to Cows & Bulls! In this game, you have to guess a secret 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
+            <ul>
+                <li>A <strong>Bull</strong> means you've guessed a digit correctly and it's in the right position.</li>
+                <li>A <strong>Cow</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
+            </ul>
+            <p>Your goal is to guess the number with the fewest attempts possible. You have 6 attempts to guess the number. Good luck!</p>
+        </div>
+    </div>
+
     <div class="container">
         <h1>Cows & Bulls</h1>
         <div id="guesses">
@@ -52,6 +103,7 @@
                     <div class="feedback" id="feedback1"></div>
                 </div>
             </div>
+            <!-- Repeat the above div for each row -->
             <div class="guess-row" id="row2">
                 <input type="text" maxlength="1" class="guess" id="guess21" oninput="handleInput(event, 2, 1)">
                 <input type="text" maxlength="1" class="guess" id="guess22" oninput="handleInput(event, 2, 2)">
@@ -183,6 +235,29 @@
         function showMessage(message) {
             let messageDiv = document.getElementById("message");
             messageDiv.textContent = message;
+        }
+
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        // Get the close button
+        var closeBtn = document.getElementsByClassName("close")[0];
+
+        // When the page loads, show the modal
+        window.onload = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on the close button, close the modal
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
         }
     </script>
 </body>
