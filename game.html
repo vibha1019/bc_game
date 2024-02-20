@@ -150,7 +150,7 @@
             if (guess.length === 5) {
                 let { bulls, cows } = checkGuess(guess);
                 let feedback = document.getElementById(`feedback${row}`);
-                feedback.textContent = `🐂: ${bulls}, 🐄: ${cows}`;
+                feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;
                 if (bulls === 5) {
                     showMessage("🎉 Congratulations! You got the number! 🎉");
                 } else {
