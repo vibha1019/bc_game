@@ -17,7 +17,6 @@
         }
 
         .container {
-            position: relative;
             text-align: center;
             background-color: #fff;
             border-radius: 8px;
@@ -108,24 +107,6 @@
             color: #333;
             text-decoration: none;
         }
-
-        /* Restart button styles */
-        .restart-btn {
-            position: absolute;
-            top: 10px;
-            right: 50px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        /* Question mark button styles */
-        .question-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -134,7 +115,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>How to Play Bulls & Cows</h2>
-            <p>Welcome to Bulls & Cows! In this game, you have to guess a 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
+            <p>Welcome to Bulls  & Cows! In this game, you have to guess a 4-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
             <ul>
                 <li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
                 <li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
@@ -151,7 +132,6 @@
                 <input type="text" maxlength="1" class="guess" id="guess12" oninput="handleInput(event, 1, 2)">
                 <input type="text" maxlength="1" class="guess" id="guess13" oninput="handleInput(event, 1, 3)">
                 <input type="text" maxlength="1" class="guess" id="guess14" oninput="handleInput(event, 1, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess15" oninput="handleInput(event, 1, 5)">
                 <div class="feedback-container">
                     <div class="feedback" id="feedback1"></div>
                 </div>
@@ -162,7 +142,6 @@
                 <input type="text" maxlength="1" class="guess" id="guess22" oninput="handleInput(event, 2, 2)">
                 <input type="text" maxlength="1" class="guess" id="guess23" oninput="handleInput(event, 2, 3)">
                 <input type="text" maxlength="1" class="guess" id="guess24" oninput="handleInput(event, 2, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess25" oninput="handleInput(event, 2, 5)">
                 <div class="feedback-container">
                     <div class="feedback" id="feedback2"></div>
                 </div>
@@ -172,7 +151,6 @@
                 <input type="text" maxlength="1" class="guess" id="guess32" oninput="handleInput(event, 3, 2)">
                 <input type="text" maxlength="1" class="guess" id="guess33" oninput="handleInput(event, 3, 3)">
                 <input type="text" maxlength="1" class="guess" id="guess34" oninput="handleInput(event, 3, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess35" oninput="handleInput(event, 3, 5)">
                 <div class="feedback-container">
                     <div class="feedback" id="feedback3"></div>
                 </div>
@@ -182,37 +160,13 @@
                 <input type="text" maxlength="1" class="guess" id="guess42" oninput="handleInput(event, 4, 2)">
                 <input type="text" maxlength="1" class="guess" id="guess43" oninput="handleInput(event, 4, 3)">
                 <input type="text" maxlength="1" class="guess" id="guess44" oninput="handleInput(event, 4, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess45" oninput="handleInput(event, 4, 5)">
                 <div class="feedback-container">
                     <div class="feedback" id="feedback4"></div>
                 </div>
             </div>
-            <div class="guess-row" id="row5">
-                <input type="text" maxlength="1" class="guess" id="guess51" oninput="handleInput(event, 5, 1)">
-                <input type="text" maxlength="1" class="guess" id="guess52" oninput="handleInput(event, 5, 2)">
-                <input type="text" maxlength="1" class="guess" id="guess53" oninput="handleInput(event, 5, 3)">
-                <input type="text" maxlength="1" class="guess" id="guess54" oninput="handleInput(event, 5, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess55" oninput="handleInput(event, 5, 5)">
-                <div class="feedback-container">
-                    <div class="feedback" id="feedback5"></div>
-                </div>
-            </div>
-            <div class="guess-row" id="row6">
-                <input type="text" maxlength="1" class="guess" id="guess61" oninput="handleInput(event, 6, 1)">
-                <input type="text" maxlength="1" class="guess" id="guess62" oninput="handleInput(event, 6, 2)">
-                <input type="text" maxlength="1" class="guess" id="guess63" oninput="handleInput(event, 6, 3)">
-                <input type="text" maxlength="1" class="guess" id="guess64" oninput="handleInput(event, 6, 4)">
-                <input type="text" maxlength="1" class="guess" id="guess65" oninput="handleInput(event, 6, 5)">
-                <div class="feedback-container">
-                    <div class="feedback" id="feedback6"></div>
-                </div>
-            </div>
         </div>
         <div id="message"></div>
-        <!-- Restart button -->
-        <div class="restart-btn" onclick="restartGame()">⟳</div>
-        <!-- Question mark button -->
-        <div class="question-btn" onclick="openModal()">❓</div>
+        <button id="restartButton" onclick="restartGame()">Restart</button>
     </div>
 
     <script>
@@ -221,18 +175,15 @@
 
         function generateRandomNumber() {
             let num = "";
-            // Ensure the first digit is not 0
-            let firstDigit = Math.floor(Math.random() * 9) + 1;
-            num += firstDigit;
-            while (num.length < 5) {
+            while (num.length < 4) {
                 let digit = Math.floor(Math.random() * 10);
+                if (num === "" && digit === 0) continue; // Ensure first digit is not 0
                 if (!num.includes(digit.toString())) {
                     num += digit;
                 }
             }
             return num;
         }
-
 
         function handleInput(event, row, column) {
             let input = document.getElementById(`guess${row}${column}`);
@@ -246,28 +197,28 @@
             }
 
             // Move to the next input box if available
-            if (column < 5 && value !== '') {
+            if (column < 4 && value !== '') {
                 document.getElementById(`guess${row}${column + 1}`).focus();
             }
 
             // Submit guess if all boxes are filled
-            if (column === 5 && value !== '') {
+            if (column === 4 && value !== '') {
                 submitGuess(row);
             }
         }
 
         function submitGuess(row) {
             let guess = "";
-            for (let i = 1; i <= 5; i++) {
+            for (let i = 1; i <= 4; i++) {
                 guess += document.getElementById(`guess${row}${i}`).value;
             }
 
             // Check if all boxes are filled
-            if (guess.length === 5) {
+            if (guess.length === 4) {
                 let { bulls, cows } = checkGuess(guess);
                 let feedback = document.getElementById(`feedback${row}`);
                 feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;
-                if (bulls === 5) {
+                if (bulls === 4) {
                     showMessage("🎉 Congratulations! You got the number! 🎉");
                 } else {
                     remainingGuesses--;
@@ -298,6 +249,14 @@
             messageDiv.textContent = message;
         }
 
+        function restartGame() {
+            targetNumber = generateRandomNumber();
+            remainingGuesses = 6;
+            document.getElementById("message").textContent = "";
+            document.querySelectorAll(".feedback").forEach(feedback => feedback.textContent = "");
+            document.querySelectorAll(".guess").forEach(input => input.value = "");
+        }
+
         // Get the modal
         var modal = document.getElementById("myModal");
 
@@ -319,32 +278,6 @@
             if (event.target == modal) {
                 modal.style.display = "none";
             }
-        }
-
-        // Function to open the modal
-        function openModal() {
-            modal.style.display = "block";
-        }
-
-        // Function to restart the game
-        function restartGame() {
-            // Reset the target number and remaining guesses
-            targetNumber = generateRandomNumber();
-            remainingGuesses = 6;
-
-            // Clear all input fields and feedback
-            for (let row = 1; row <= 6; row++) {
-                for (let col = 1; col <= 5; col++) {
-                    document.getElementById(`guess${row}${col}`).value = '';
-                }
-                document.getElementById(`feedback${row}`).textContent = '';
-            }
-
-            // Clear the message
-            showMessage("");
-
-            // Hide the modal
-            modal.style.display = "none";
         }
     </script>
 </body>
