@@ -17,6 +17,7 @@
         }
 
         .container {
+            position: relative;
             text-align: center;
             background-color: #fff;
             border-radius: 8px;
@@ -24,7 +25,6 @@
             padding: 30px;
             max-width: 600px;
             width: 90%;
-            position: relative; /* Added for question mark button positioning */
         }
 
         h1 {
@@ -109,8 +109,17 @@
             text-decoration: none;
         }
 
-        /* Question mark button */
-        #question-mark {
+        /* Restart button styles */
+        .restart-btn {
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Question mark button styles */
+        .question-btn {
             position: absolute;
             top: 10px;
             right: 10px;
@@ -125,7 +134,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>How to Play Bulls & Cows</h2>
-            <p>Welcome to Bulls  & Cows! In this game, you have to guess a 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
+            <p>Welcome to Bulls & Cows! In this game, you have to guess a 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
             <ul>
                 <li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
                 <li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
@@ -135,12 +144,8 @@
     </div>
 
     <div class="container">
-        <!-- Question mark button -->
-        <button id="question-mark" onclick="openModal()">&#63;</button>
-        
         <h1>Bulls & Cows</h1>
         <div id="guesses">
-            <!-- Guess rows -->
             <div class="guess-row" id="row1">
                 <input type="text" maxlength="1" class="guess" id="guess11" oninput="handleInput(event, 1, 1)">
                 <input type="text" maxlength="1" class="guess" id="guess12" oninput="handleInput(event, 1, 2)">
@@ -204,6 +209,10 @@
             </div>
         </div>
         <div id="message"></div>
+        <!-- Restart button -->
+        <div class="restart-btn" onclick="restartGame()">⟳</div>
+        <!-- Question mark button -->
+        <div class="question-btn" onclick="openModal()">❓</div>
     </div>
 
     <script>
@@ -311,6 +320,27 @@
         // Function to open the modal
         function openModal() {
             modal.style.display = "block";
+        }
+
+        // Function to restart the game
+        function restartGame() {
+            // Reset the target number and remaining guesses
+            targetNumber = generateRandomNumber();
+            remainingGuesses = 6;
+
+            // Clear all input fields and feedback
+            for (let row = 1; row <= 6; row++) {
+                for (let col = 1; col <= 5; col++) {
+                    document.getElementById(`guess${row}${col}`).value = '';
+                }
+                document.getElementById(`feedback${row}`).textContent = '';
+            }
+
+            // Clear the message
+            showMessage("");
+
+            // Hide the modal
+            modal.style.display = "none";
         }
     </script>
 </body>
