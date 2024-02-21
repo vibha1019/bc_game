@@ -107,6 +107,25 @@
             color: #333;
             text-decoration: none;
         }
+
+        #buttons {
+            margin-top: 20px;
+        }
+
+        #restartButton, #helpButton {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        #restartButton:hover, #helpButton:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -115,7 +134,7 @@
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>How to Play Bulls & Cows</h2>
-            <p>Welcome to Bulls  & Cows! In this game, you have to guess a 4-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
+            <p>Welcome to Bulls & Cows! In this game, you have to guess a 4-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
             <ul>
                 <li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
                 <li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
@@ -164,9 +183,30 @@
                     <div class="feedback" id="feedback4"></div>
                 </div>
             </div>
+            <div class="guess-row" id="row5">
+                <input type="text" maxlength="1" class="guess" id="guess51" oninput="handleInput(event, 5, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess52" oninput="handleInput(event, 5, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess53" oninput="handleInput(event, 5, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess54" oninput="handleInput(event, 5, 4)">
+                <div class="feedback-container">
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+            </div>
+            <div class="guess-row" id="row6">
+                <input type="text" maxlength="1" class="guess" id="guess61" oninput="handleInput(event, 6, 1)">
+                <input type="text" maxlength="1" class="guess" id="guess62" oninput="handleInput(event, 6, 2)">
+                <input type="text" maxlength="1" class="guess" id="guess63" oninput="handleInput(event, 6, 3)">
+                <input type="text" maxlength="1" class="guess" id="guess64" oninput="handleInput(event, 6, 4)">
+                <div class="feedback-container">
+                    <div class="feedback" id="feedback6"></div>
+                </div>
+            </div>
         </div>
         <div id="message"></div>
-        <button id="restartButton" onclick="restartGame()">Restart</button>
+        <div id="buttons">
+            <button id="restartButton" onclick="restartGame()">Restart</button>
+            <button id="helpButton" onclick="displayModal()">?</button>
+        </div>
     </div>
 
     <script>
@@ -257,16 +297,16 @@
             document.querySelectorAll(".guess").forEach(input => input.value = "");
         }
 
+        function displayModal() {
+            let modal = document.getElementById("myModal");
+            modal.style.display = "block";
+        }
+
         // Get the modal
         var modal = document.getElementById("myModal");
 
         // Get the close button
         var closeBtn = document.getElementsByClassName("close")[0];
-
-        // When the page loads, show the modal
-        window.onload = function() {
-            modal.style.display = "block";
-        }
 
         // When the user clicks on the close button, close the modal
         closeBtn.onclick = function() {
