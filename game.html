@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cows & Bulls</title>
+    <title>Bulls & Cows</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,6 +24,7 @@
             padding: 30px;
             max-width: 600px;
             width: 90%;
+            position: relative; /* Added for question mark button positioning */
         }
 
         h1 {
@@ -107,6 +108,15 @@
             color: #333;
             text-decoration: none;
         }
+
+        /* Question mark button */
+        #question-mark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -114,8 +124,8 @@
     <div id="myModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>How to Play Cows & Bulls</h2>
-            <p>Welcome to Cows & Bulls! In this game, you have to guess a secret 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
+            <h2>How to Play Bulls & Cows</h2>
+            <p>Welcome to Bulls  & Cows! In this game, you have to guess a 5-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
             <ul>
                 <li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
                 <li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
@@ -125,8 +135,12 @@
     </div>
 
     <div class="container">
-        <h1>Cows & Bulls</h1>
+        <!-- Question mark button -->
+        <button id="question-mark" onclick="openModal()">&#63;</button>
+        
+        <h1>Bulls & Cows</h1>
         <div id="guesses">
+            <!-- Guess rows -->
             <div class="guess-row" id="row1">
                 <input type="text" maxlength="1" class="guess" id="guess11" oninput="handleInput(event, 1, 1)">
                 <input type="text" maxlength="1" class="guess" id="guess12" oninput="handleInput(event, 1, 2)">
@@ -292,6 +306,11 @@
             if (event.target == modal) {
                 modal.style.display = "none";
             }
+        }
+
+        // Function to open the modal
+        function openModal() {
+            modal.style.display = "block";
         }
     </script>
 </body>
