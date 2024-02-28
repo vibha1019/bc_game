@@ -212,17 +212,17 @@
     <script>
         let targetNumber = generateRandomNumber();
         let remainingGuesses = 6;
-
         function generateRandomNumber() {
             let num = "";
+            let firstDigit = Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9 (inclusive)
+            num += firstDigit;
             while (num.length < 4) {
                 let digit = Math.floor(Math.random() * 10);
-                if (!num.includes(digit.toString())) {
-                    num += digit;
-                }
+                num += digit;
             }
             return num;
         }
+
 
         function handleInput(event, row, column) {
             let input = document.getElementById(`guess${row}${column}`);
@@ -251,7 +251,7 @@
             for (let i = 1; i <= 4; i++) {
                 guess += document.getElementById(`guess${row}${i}`).value;
             }
-
+        
             // Check if all boxes are filled
             if (guess.length === 4) {
                 let { bulls, cows } = checkGuess(guess);
@@ -265,8 +265,13 @@
                         showMessage(`Try again! The actual number was ${targetNumber}.`);
                     }
                 }
+                // Disable the input fields
+                for (let i = 1; i <= 4; i++) {
+                    document.getElementById(`guess${row}${i}`).disabled = true;
+                }
             }
         }
+
 
         function checkGuess(guess) {
             let bulls = 0;
