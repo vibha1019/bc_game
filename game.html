@@ -326,21 +326,24 @@
             // Reset the target number and remaining guesses
             targetNumber = generateRandomNumber();
             remainingGuesses = 6;
-
+        
             // Clear all input fields and feedback
             for (let row = 1; row <= 6; row++) {
                 for (let col = 1; col <= 4; col++) {
-                    document.getElementById(`guess${row}${col}`).value = '';
+                    let inputField = document.getElementById(`guess${row}${col}`);
+                    inputField.value = '';
+                    inputField.disabled = false; // Enable the input field
                 }
                 document.getElementById(`feedback${row}`).textContent = '';
             }
-
+        
             // Clear the message
             showMessage("");
-
+        
             // Hide the modal
             modal.style.display = "none";
         }
+
     </script>
 </body>
 </html>
