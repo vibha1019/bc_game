@@ -227,24 +227,26 @@
         function handleInput(event, row, column) {
             let input = document.getElementById(`guess${row}${column}`);
             let value = event.target.value.trim();
-
+        
             // Only allow numeric input and limit to one digit
             if (/^\d$/.test(value)) {
                 input.value = value;
+        
+                // Move to the next input box if available
+                if (column < 4 && value !== '') {
+                    document.getElementById(`guess${row}${column + 1}`).focus();
+                }
+        
+                // Submit guess if all boxes are filled
+                if (column === 4 && value !== '') {
+                    submitGuess(row);
+                }
             } else {
+                // Clear the input if the value is not numeric
                 input.value = '';
             }
-
-            // Move to the next input box if available
-            if (column < 4 && value !== '') {
-                document.getElementById(`guess${row}${column + 1}`).focus();
-            }
-
-            // Submit guess if all boxes are filled
-            if (column === 4 && value !== '') {
-                submitGuess(row);
-            }
         }
+
 
         function submitGuess(row) {
             let guess = "";
