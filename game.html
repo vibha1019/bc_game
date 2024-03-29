@@ -248,8 +248,21 @@
                     submitGuess(row);
                 }
             }
+        
+            // Check if all boxes are filled and submit guess
+            if (row === 6 && value !== '') {
+                let allBoxesFilled = true;
+                for (let i = 1; i <= 4; i++) {
+                    if (document.getElementById(`guess${row}${i}`).value === '') {
+                        allBoxesFilled = false;
+                        break;
+                    }
+                }
+                if (allBoxesFilled) {
+                    submitGuess(row);
+                }
+            }
         }
-
 
 
 
