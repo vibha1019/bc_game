@@ -237,13 +237,15 @@
                 value = ''; // Reset value to prevent advancing
             }
         
-            // Submit guess if all boxes are filled
+            // Move to the next input box if available and the value is numeric
             if (value !== '') {
-                submitGuess(row);
-            } else {
-                // Move to the next input box if available and the value is numeric
                 if (column < 4) {
                     document.getElementById(`guess${row}${column + 1}`).focus();
+                } else if (row < 6) {
+                    document.getElementById(`guess${row + 1}1`).focus();
+                } else {
+                    // Submit guess if all boxes are filled
+                    submitGuess(row);
                 }
             }
         }
