@@ -210,18 +210,18 @@
     </div>
 
     <script>
-        let num = "";
-        let firstDigit = Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9 (inclusive) for the first digit
-        num += firstDigit;
-        let digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'].filter(digit => digit !== firstDigit.toString()); // Create an array of digits from 0 to 9 excluding the first digit
-        for (let i = 0; i < 3; i++) {
-            let randomIndex = Math.floor(Math.random() * digits.length); // Generate a random index within the range of remaining digits
-            num += digits[randomIndex]; // Append a random digit from the remaining digits
-            digits.splice(randomIndex, 1); // Remove the selected digit from the array to ensure no duplicates
+        let targetNumber = generateRandomNumber();
+        let remainingGuesses = 6;
+        function generateRandomNumber() {
+            let num = "";
+            let firstDigit = Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9 (inclusive)
+            num += firstDigit;
+            while (num.length < 4) {
+                let digit = Math.floor(Math.random() * 10);
+                num += digit;
+            }
+            return num;
         }
-        return num;
-    }
-
 
 
         function handleInput(event, row, column) {
