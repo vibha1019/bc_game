@@ -227,7 +227,7 @@
         function handleInput(event, row, column) {
             let input = document.getElementById(`guess${row}${column}`);
             let value = event.target.value.trim();
-        
+            
             // Only allow numeric input and limit to one digit
             if (/^\d$/.test(value)) {
                 input.value = value;
@@ -236,33 +236,27 @@
                 input.value = '';
                 value = ''; // Reset value to prevent advancing
             }
-        
-            // Move to the next input box if available and the value is numeric
-            if (value !== '') {
-                if (column < 4) {
-                    document.getElementById(`guess${row}${column + 1}`).focus();
-                } else if (row < 6) {
-                    document.getElementById(`guess${row + 1}1`).focus();
-                } else {
-                    // Submit guess if all boxes are filled
-                    submitGuess(row);
+            
+            // Check if all boxes in the row are filled
+            let allBoxesFilled = true;
+            for (let i = 1; i <= 4; i++) {
+                if (document.getElementById(`guess${row}${i}`).value === '') {
+                    allBoxesFilled = false;
+                    break;
                 }
             }
-        
-            // Check if all boxes are filled and submit guess
-            if (row === 6 && value !== '') {
-                let allBoxesFilled = true;
-                for (let i = 1; i <= 4; i++) {
-                    if (document.getElementById(`guess${row}${i}`).value === '') {
-                        allBoxesFilled = false;
-                        break;
-                    }
-                }
-                if (allBoxesFilled) {
-                    submitGuess(row);
+            
+            // Submit guess if all boxes in the row are filled
+            if (allBoxesFilled) {
+                submitGuess(row);
+            } else {
+                // Move to the next input box if available and the value is numeric
+                if (column < 4) {
+                    document.getElementById(`guess${row}${column + 1}`).focus();
                 }
             }
         }
+
 
 
 
