@@ -20,12 +20,12 @@
             position: relative;
             text-align: center;
             background-color: #f9f9f9;
-            border-radius: 15px;
-            // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px; /* Added border-radius */
             padding: 30px;
             max-width: 600px;
             width: 90%;
         }
+
 
         h1 {
             color: #333;
@@ -52,7 +52,9 @@
 
         .guess:focus {
             border-color: #007bff;
+            outline: none; /* Add this line to remove the default focus outline */
         }
+
 
         .feedback {
             font-weight: bold;
