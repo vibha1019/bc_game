@@ -212,6 +212,27 @@
     </div>
 
     <script>
+        document.addEventListener("keydown", function(event) {
+        const numericKeys = /^[0-9]$/;
+        const currentFocusedInput = document.activeElement;
+        
+        // Check if the key pressed is a numeric digit
+        if (numericKeys.test(event.key)) {
+            // Find the next empty input box in the next row and focus on it
+            if (currentFocusedInput.tagName === "INPUT") {
+                const currentRow = parseInt(currentFocusedInput.id.substring(5, 6));
+                const nextRow = currentRow === 6 ? 1 : currentRow + 1;
+                for (let col = 1; col <= 4; col++) {
+                    const nextInput = document.getElementById(`guess${nextRow}${col}`);
+                    if (nextInput.value === '') {
+                        nextInput.focus();
+                        break;
+                    }
+                }
+            }
+        }
+    });
+
         let targetNumber = generateRandomNumber();
         let remainingGuesses = 6;
         function generateRandomNumber() {
