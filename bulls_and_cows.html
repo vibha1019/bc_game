@@ -140,22 +140,24 @@
         .guess:disabled {
             background-color: white; /* Change to your preferred color */
         }
+
     </style>
 </head>
 <body>
     <!-- Modal popup -->
     <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>How to Play Bulls & Cows</h2>
-            <p>Welcome to Bulls & Cows! In this game, you have to guess a 4-digit number. After each guess, you'll receive feedback in the form of Bulls and Cows:</p>
-            <ul>
-                <li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
-                <li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
-            </ul>
-            <p>Your goal is to guess the number with the fewest attempts possible. You have 6 attempts to guess the number. Good luck!</p>
-        </div>
-    </div>
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>How to Play Bulls & Cows</h2>
+			<p>Welcome to Bulls & Cows! In this game, you have to guess a 4-digit number. The number will have 4 unique digits.</p>
+			<ul>
+				<li>A <strong>Bull 🐂</strong> means you've guessed a digit correctly and it's in the right position.</li>
+				<li>A <strong>Cow 🐄</strong> means you've guessed a digit correctly, but it's in the wrong position.</li>
+			</ul>
+			<p>Your goal is to guess the number with the fewest attempts possible. You have 6 attempts to guess the number. Good luck!</p>
+		</div>
+	</div>
+	
 
     <div class="container">
         <h1>Bulls & Cows</h1>
@@ -216,162 +218,155 @@
             </div>
         </div>
         <div id="message"></div>
-        <!-- Restart button -->
-        <div class="restart-btn" onclick="restartGame()">⟳</div>
-        <!-- Question mark button -->
-        <div class="question-btn" onclick="openModal()">❓</div>
-        <div class="home-btn" onclick="goToHome()">🏠</div>
+       <!-- Restart button -->
+		<div class="restart-btn" title="Restart" onclick="restartGame()">⟳</div>
+		<!-- Question mark button -->
+		<div class="question-btn" title="Help" onclick="openModal()">❓</div>
+		<div class="home-btn" title="Home" onclick="goToHome()">🏠</div>
+
     </div>
 
     <script>
         let targetNumber = generateRandomNumber();
-        let remainingGuesses = 6;
-        let currentRow = 1;
-        let currentCol = 1;
+		let remainingGuesses = 6;
+		let currentRow = 1;
+		let currentCol = 1;
 
-        function generateRandomNumber() {
-            let num = "";
-            let firstDigit = Math.floor(Math.random() * 9) + 1; // Generates a random number between 1 and 9 (inclusive)
-            num += firstDigit;
-            while (num.length < 4) {
-                let digit = Math.floor(Math.random() * 10);
-                num += digit;
-            }
-            return num;
-        }
+		function generateRandomNumber() {
+			let digits = [1, 2, 3, 4, 5, 6, 7, 8, 9]; // First digit cannot be 0
+			let num = "";
 
-        function handleInput(event) {
-            const value = event.target.value;
-            if (/^\d$/.test(value)) {
-                event.target.value = value; // Ensure only the digit entered is kept
-                if (currentCol < 4) {
-                    currentCol++;
-                    document.getElementById(`guess${currentRow}${currentCol}`).focus();
-                } else if (isRowFilled(currentRow)) {
-                    submitGuess(currentRow);
-                    if (currentRow < 6) {
-                        currentRow++;
-                        currentCol = 1;
-                        document.getElementById(`guess${currentRow}${currentCol}`).focus();
-                    }
-                }
-            } else if (event.key === 'Backspace') {
-                if (currentCol > 1) {
-                    currentCol--;
-                    document.getElementById(`guess${currentRow}${currentCol}`).focus();
-                    document.getElementById(`guess${currentRow}${currentCol}`).value = ''; // Clear the input
-                }
-            }
-        }
-			document.querySelectorAll('.guess').forEach(input => {
-			input.addEventListener('input', handleInput);
-			input.addEventListener('keydown', handleBackspace);
-		});
+			// Select the first digit (1-9)
+			let firstDigitIndex = Math.floor(Math.random() * digits.length);
+			num += digits[firstDigitIndex];
+			digits.splice(firstDigitIndex, 1); // Remove the selected digit from the pool
+
+			// Add 0 to the pool for the remaining digits
+			digits.push(0);
+
+			// Select the remaining three digits (0-9, no repeats)
+			while (num.length < 4) {
+				let digitIndex = Math.floor(Math.random() * digits.length);
+				num += digits[digitIndex];
+				digits.splice(digitIndex, 1); // Remove the selected digit from the pool
+			}
+
+			return num;
+		}
+
+		function handleInput(event) {
+			const value = event.target.value;
+			if (/^\d$/.test(value)) {
+				event.target.value = value; // Ensure only the digit entered is kept
+				if (currentCol < 4) {
+					currentCol++;
+					document.getElementById(`guess${currentRow}${currentCol}`).focus();
+				}
+			} else {
+				event.target.value = ''; // Clear the input if it's not a valid digit
+			}
+		}
 
 		function handleBackspace(event) {
 			if (event.key === 'Backspace' && event.target.value === "") {
 				if (currentCol > 1) {
 					currentCol--;
 					document.getElementById(`guess${currentRow}${currentCol}`).focus();
+					document.getElementById(`guess${currentRow}${currentCol}`).value = ''; // Clear the input
 				}
 			}
 		}
 
+		function handleNavigation(event) {
+			if (event.key === 'ArrowLeft' && currentCol > 1) {
+				currentCol--;
+				document.getElementById(`guess${currentRow}${currentCol}`).focus();
+			} else if (event.key === 'ArrowRight' && currentCol < 4) {
+				currentCol++;
+				document.getElementById(`guess${currentRow}${currentCol}`).focus();
+			} else if (event.key === 'Enter') {
+				if (isRowFilled(currentRow)) {
+					submitGuess(currentRow);
+					if (currentRow < 6 && remainingGuesses > 0) {
+						currentRow++;
+						currentCol = 1;
+						document.getElementById(`guess${currentRow}${currentCol}`).focus();
+					}
+				}
+			}
+		}
 
-        function handleNavigation(event) {
-            if (event.key === 'ArrowLeft' && currentCol > 1) {
-                currentCol--;
-                document.getElementById(`guess${currentRow}${currentCol}`).focus();
-            } else if (event.key === 'ArrowRight' && currentCol < 4) {
-                currentCol++;
-                document.getElementById(`guess${currentRow}${currentCol}`).focus();
-            } else if (event.key === 'Enter') {
-                if (isRowFilled(currentRow)) {
-                    submitGuess(currentRow);
-                    if (currentRow < 6) {
-                        currentRow++;
-                        currentCol = 1;
-                        document.getElementById(`guess${currentRow}${currentCol}`).focus();
-                    }
-                }
-            }
-        }
+		function isRowFilled(row) {
+			for (let col = 1; col <= 4; col++) {
+				if (document.getElementById(`guess${row}${col}`).value === "") {
+					return false;
+				}
+			}
+			return true;
+		}
 
-        function isRowFilled(row) {
-            for (let col = 1; col <= 4; col++) {
-                if (document.getElementById(`guess${row}${col}`).value === "") {
-                    return false;
-                }
-            }
-            return true;
-        }
+		function submitGuess(row) {
+			let guess = "";
+			for (let i = 1; i <= 4; i++) {
+				guess += document.getElementById(`guess${row}${i}`).value;
+			}
 
-        function submitGuess(row) {
-            let guess = "";
-            for (let i = 1; i <= 4; i++) {
-                guess += document.getElementById(`guess${row}${i}`).value;
-            }
+			if (guess.length === 4) {
+				let { bulls, cows } = checkGuess(guess);
+				let feedback = document.getElementById(`feedback${row}`);
+				feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;
+				if (bulls === 4) {
+					showMessage("🎉 Congratulations! You got the number! 🎉");
+				} else {
+					remainingGuesses--;
+					if (remainingGuesses === 0) {
+						showMessage(`Try again! The actual number was ${targetNumber}.`);
+					}
+				}
+				for (let i = 1; i <= 4; i++) {
+					document.getElementById(`guess${row}${i}`).disabled = true;
+				}
+			}
+		}
 
-            if (guess.length === 4) {
-                let { bulls, cows } = checkGuess(guess);
-                let feedback = document.getElementById(`feedback${row}`);
-                feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;
-                if (bulls === 4) {
-                    showMessage("🎉 Congratulations! You got the number! 🎉");
-                } else {
-                    remainingGuesses--;
-                    if (remainingGuesses === 0) {
-                        showMessage(`Try again! The actual number was ${targetNumber}.`);
-                    }
-                }
-                for (let i = 1; i <= 4; i++) {
-                    document.getElementById(`guess${row}${i}`).disabled = true;
-                }
-            }
-        }
+		function checkGuess(guess) {
+			let bulls = 0;
+			let cows = 0;
 
-        function checkGuess(guess) {
-            let bulls = 0;
-            let cows = 0;
+			for (let i = 0; i < guess.length; i++) {
+				if (guess[i] === targetNumber[i]) {
+					bulls++;
+				} else if (targetNumber.includes(guess[i])) {
+					cows++;
+				}
+			}
 
-            for (let i = 0; i < guess.length; i++) {
-                if (guess[i] === targetNumber[i]) {
-                    bulls++;
-                } else if (targetNumber.includes(guess[i])) {
-                    cows++;
-                }
-            }
+			return { bulls, cows };
+		}
 
-            return { bulls, cows };
-        }
+		function showMessage(message) {
+			let messageDiv = document.getElementById("message");
+			messageDiv.textContent = message;
+		}
 
-        function showMessage(message) {
-            let messageDiv = document.getElementById("message");
-            messageDiv.textContent = message;
-        }
+		var modal = document.getElementById("myModal");
+		var closeBtn = document.getElementsByClassName("close")[0];
 
-        var modal = document.getElementById("myModal");
-        var closeBtn = document.getElementsByClassName("close")[0];
-
-        window.onload = function() {
-            modal.style.display = "block";
-            document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box
-        }
-
-
+		window.onload = function() {
+			modal.style.display = "block";
+			document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box
+		}
 
 		closeBtn.onclick = function() {
 			modal.style.display = "none";
 			document.addEventListener('keydown', handleNavigation); // Reattach the event listener
 		}
 
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
+		window.onclick = function(event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
 
 		function openModal() {
 			modal.style.display = "block";
@@ -398,20 +393,16 @@
 			document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box after restarting
 		}
 
-		window.onload = function() {
-			modal.style.display = "block";
-			document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box
+		function goToHome() {
+			window.location.href = "index.html"; 
 		}
 
+		document.addEventListener('keydown', handleNavigation);
+		document.querySelectorAll('.guess').forEach(input => {
+			input.addEventListener('input', handleInput);
+			input.addEventListener('keydown', handleBackspace);
+		});
 
-        function goToHome() {
-            window.location.href = "index.html"; 
-        }
-
-        document.addEventListener('keydown', handleNavigation);
-        document.querySelectorAll('.guess').forEach(input => {
-            input.addEventListener('input', handleInput);
-        });
     </script>
 </body>
 </html>
