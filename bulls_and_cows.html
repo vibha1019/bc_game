@@ -6,26 +6,25 @@
     <title>Bulls & Cows</title>
     <style>
         body {
-        font-family: Arial, sans-serif;
-        background-color: #d2b48c; /* Darker brown background */
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-    	}
+            font-family: Arial, sans-serif;
+            background-color: #d2b48c; /* Darker brown background */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-		.container {
-			position: relative;
-			text-align: center;
-			background-color: #f9f9f9;
-			border-radius: 15px; /* Added border-radius */
-			padding: 30px;
-			max-width: 600px;
-			width: 90%;
-		}
-		
+        .container {
+            position: relative;
+            text-align: center;
+            background-color: #f9f9f9;
+            border-radius: 15px; /* Added border-radius */
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+        }
 
         h1 {
             color: #333;
@@ -56,19 +55,18 @@
         }
 
         .feedback-container {
-			display: flex;
-			align-items: center;
-			margin-top: 10px;
-			width: 110px; 
-		}
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            width: 110px; 
+        }
 
-		.feedback {
-			font-weight: bold;
-			font-size: 20px;
-			width: 100%; 
-			text-align: center; 
-		}
-
+        .feedback {
+            font-weight: bold;
+            font-size: 20px;
+            width: 100%; 
+            text-align: center; 
+        }
 
         #message {
             margin-top: 20px;
@@ -131,7 +129,7 @@
             cursor: pointer;
         }
 
-		.home-btn {
+        .home-btn {
             position: absolute;
             top: 10px;
             left: 10px;
@@ -222,7 +220,7 @@
         <div class="restart-btn" onclick="restartGame()">⟳</div>
         <!-- Question mark button -->
         <div class="question-btn" onclick="openModal()">❓</div>
-		<div class="home-btn" onclick="goToHome()">🏠</div>
+        <div class="home-btn" onclick="goToHome()">🏠</div>
     </div>
 
     <script>
@@ -242,20 +240,70 @@
             return num;
         }
 
-        function handleInput(value) {
+        function handleInput(event) {
+            const value = event.target.value;
             if (/^\d$/.test(value)) {
-                let input = document.getElementById(`guess${currentRow}${currentCol}`);
-                input.value = value;
+                event.target.value = value; // Ensure only the digit entered is kept
                 if (currentCol < 4) {
                     currentCol++;
-                } else {
-                    currentCol = 1;
+                    document.getElementById(`guess${currentRow}${currentCol}`).focus();
+                } else if (isRowFilled(currentRow)) {
                     submitGuess(currentRow);
                     if (currentRow < 6) {
                         currentRow++;
+                        currentCol = 1;
+                        document.getElementById(`guess${currentRow}${currentCol}`).focus();
+                    }
+                }
+            } else if (event.key === 'Backspace') {
+                if (currentCol > 1) {
+                    currentCol--;
+                    document.getElementById(`guess${currentRow}${currentCol}`).focus();
+                    document.getElementById(`guess${currentRow}${currentCol}`).value = ''; // Clear the input
+                }
+            }
+        }
+			document.querySelectorAll('.guess').forEach(input => {
+			input.addEventListener('input', handleInput);
+			input.addEventListener('keydown', handleBackspace);
+		});
+
+		function handleBackspace(event) {
+			if (event.key === 'Backspace' && event.target.value === "") {
+				if (currentCol > 1) {
+					currentCol--;
+					document.getElementById(`guess${currentRow}${currentCol}`).focus();
+				}
+			}
+		}
+
+
+        function handleNavigation(event) {
+            if (event.key === 'ArrowLeft' && currentCol > 1) {
+                currentCol--;
+                document.getElementById(`guess${currentRow}${currentCol}`).focus();
+            } else if (event.key === 'ArrowRight' && currentCol < 4) {
+                currentCol++;
+                document.getElementById(`guess${currentRow}${currentCol}`).focus();
+            } else if (event.key === 'Enter') {
+                if (isRowFilled(currentRow)) {
+                    submitGuess(currentRow);
+                    if (currentRow < 6) {
+                        currentRow++;
+                        currentCol = 1;
+                        document.getElementById(`guess${currentRow}${currentCol}`).focus();
                     }
                 }
             }
+        }
+
+        function isRowFilled(row) {
+            for (let col = 1; col <= 4; col++) {
+                if (document.getElementById(`guess${row}${col}`).value === "") {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function submitGuess(row) {
@@ -267,8 +315,8 @@
             if (guess.length === 4) {
                 let { bulls, cows } = checkGuess(guess);
                 let feedback = document.getElementById(`feedback${row}`);
-                feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;                
-				if (bulls === 4) {
+                feedback.textContent = `🐂: ${bulls} 🐄: ${cows}`;
+                if (bulls === 4) {
                     showMessage("🎉 Congratulations! You got the number! 🎉");
                 } else {
                     remainingGuesses--;
@@ -300,8 +348,6 @@
         function showMessage(message) {
             let messageDiv = document.getElementById("message");
             messageDiv.textContent = message;
-            // Optionally, you can also reveal the targetNumber when the game ends
-            // messageDiv.innerHTML += `<br> The number was: ${targetNumber}`;
         }
 
         var modal = document.getElementById("myModal");
@@ -309,11 +355,16 @@
 
         window.onload = function() {
             modal.style.display = "block";
+            document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box
         }
 
-        closeBtn.onclick = function() {
-            modal.style.display = "none";
-        }
+
+
+		closeBtn.onclick = function() {
+			modal.style.display = "none";
+			document.addEventListener('keydown', handleNavigation); // Reattach the event listener
+		}
+
 
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -321,38 +372,46 @@
             }
         }
 
-        function openModal() {
-            modal.style.display = "block";
-        }
 
-        function restartGame() {
-            targetNumber = generateRandomNumber();
-            remainingGuesses = 6;
-            currentRow = 1;
-            currentCol = 1;
+		function openModal() {
+			modal.style.display = "block";
+			document.getElementById(`guess${currentRow}${currentCol}`).blur(); // Remove focus from the input
+		}
 
-            for (let row = 1; row <= 6; row++) {
-                for (let col = 1; col <= 4; col++) {
-                    let inputField = document.getElementById(`guess${row}${col}`);
-                    inputField.value = '';
-                    inputField.disabled = false;
-                }
-                document.getElementById(`feedback${row}`).textContent = '';
-            }
+		function restartGame() {
+			targetNumber = generateRandomNumber();
+			remainingGuesses = 6;
+			currentRow = 1;
+			currentCol = 1;
 
-            showMessage("");
-            modal.style.display = "none";
-        }
-		function goToHome() {
+			for (let row = 1; row <= 6; row++) {
+				for (let col = 1; col <= 4; col++) {
+					let inputField = document.getElementById(`guess${row}${col}`);
+					inputField.value = '';
+					inputField.disabled = false;
+				}
+				document.getElementById(`feedback${row}`).textContent = '';
+			}
+
+			showMessage("");
+			modal.style.display = "none";
+			document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box after restarting
+		}
+
+		window.onload = function() {
+			modal.style.display = "block";
+			document.getElementById(`guess${currentRow}${currentCol}`).focus(); // Auto-focus the first input box
+		}
+
+
+        function goToHome() {
             window.location.href = "index.html"; 
         }
 
-
-        document.addEventListener('keydown', function(event) {
-            handleInput(event.key);
+        document.addEventListener('keydown', handleNavigation);
+        document.querySelectorAll('.guess').forEach(input => {
+            input.addEventListener('input', handleInput);
         });
-
     </script>
 </body>
 </html>
-
